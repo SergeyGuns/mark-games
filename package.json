@@ -4,15 +4,19 @@
   "description": "",
   "scripts": {
     "start": "parcel src/index.html",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "deploy": "npm run gh-pages",
+    "gh-pages": "gh-pages -d dist -b gh-pages"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "gh-pages": "^6.3.0",
     "parcel": "^2.15.4",
     "parcel-plugin-static-files-copy": "^2.6.0"
   },
   "staticFiles": {
-        "staticPath": ["sounds"]
-    }
+    "staticPath": [
+      "sounds"
+    ]
+  }
 }
