@@ -5,13 +5,15 @@
   "scripts": {
     "start": "parcel serve src/index.html",
     "build": "parcel build src/index.html --public-url ./",
-    "clear": "rm -fr dist",
+    "clear": "rm -rf dist",
     "gh-pages": "gh-pages -d dist -b gh-pages",
     "deploy": "npm run clear && npm run build && npm run gh-pages"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@parcel/packager-raw-url": "^2.15.4",
+    "@parcel/transformer-webmanifest": "^2.15.4",
     "gh-pages": "^6.3.0",
     "parcel": "^2.15.4",
     "parcel-plugin-static-files-copy": "^2.6.0"
