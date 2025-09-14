@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Circle Game</title>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f0f0f0;
+      }
+
+      .game-container {
+        position: relative;
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        background-color: white;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .circle {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: green;
+        cursor: pointer;
+      }
+
+      .score,
+      .timer {
+        font-family: Arial, sans-serif;
+        font-size: 24px;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="game-container">
+      <div class="circle" id="circle1"></div>
+      <div class="circle" id="circle2"></div>
+      <div class="circle" id="circle3"></div>
+      <div class="circle" id="circle4"></div>
+      <div class="circle" id="circle5"></div>
+    </div>
+    <div class="score">Score: <span id="score">0</span></div>
+    <div class="timer">Time left: <span id="time-left">30</span></div>
+    <script type="module">
+      let score = 0;
+      const time = 60;
+      let timeLeft = time;
+
+      let gameActive = true;
+      let trueCircleIndex = 0;
+      const colors = ["red", "blue", "green"];
+      let trueColor = "";
+      let falseColor = "";
+      const circles = document.querySelectorAll(".circle");
+      const scoreElement = document.getElementById("score");
+      const timeLeftElement = document.getElementById("time-left");
+      let audioUrl = require("url:./sounds/circle_game_sound.mp3");
+      let sound = new Audio(audioUrl);
+
+      function setCirclePositions() {
+        const angleIncrement = (2 * Math.PI) / circles.length;
+        circles.forEach((circle, index) => {
+          const angle = index * angleIncrement;
+          const radius = 100;
+          circle.style.left = `${150 + radius * Math.cos(angle) - 25}px`;
+          circle.style.top = `${150 + radius * Math.sin(angle) - 25}px`;
+        });
+      }
+      function getRandomColors() {
+        const colorChoices = [...colors];
+        trueColor = colorChoices.splice(
+          Math.floor(Math.random() * colorChoices.length),
+          1
+        )[0];
+        falseColor =
+          colorChoices[Math.floor(Math.random() * colorChoices.length)];
+      }
+      function setColors() {
+        let newTrueCircleIndex;
+        do {
+          newTrueCircleIndex = Math.floor(Math.random() * circles.length);
+        } while (newTrueCircleIndex === trueCircleIndex);
+        circles.forEach((circle, index) => {
+          circle.style.backgroundColor =
+            index === newTrueCircleIndex ? trueColor : falseColor;
+        });
+        trueCircleIndex = newTrueCircleIndex;
+      }
+      circles.forEach((circle, index) => {
+        circle.addEventListener("click", () => {
+          if (!gameActive) return;
+          if (index === trueCircleIndex) {
+            score++;
+            scoreElement.textContent = score;
+            setColors();
+
+            sound.play();
+          }
+        });
+      });
+      function updateTimer() {
+        if (timeLeft <= 0) {
+          gameActive = false;
+        //   alert(`Game Over! Your score is ${score}`);
+          setCirclePositions();
+          getRandomColors();
+          setColors();
+          timeLeft = time;
+          gameActive = true;
+          timeLeftElement.textContent = timeLeft;
+          setTimeout(updateTimer, 1000);
+          return;
+        }
+        timeLeft--;
+        timeLeftElement.textContent = timeLeft;
+        setTimeout(updateTimer, 1000);
+      }
+      setCirclePositions();
+      getRandomColors();
+      setColors();
+      updateTimer();
+    </script>
+  </body>
+</html>
