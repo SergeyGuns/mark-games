@@ -106,7 +106,7 @@
           trueCircleIndex = newTrueCircleIndex;
         }
         circles.forEach((circle, index) => {
-          circle.addEventListener("click", () => {
+          circle.addEventListener("pointerdown", () => {
             if (!gameActive) return;
             if (index === trueCircleIndex) {
               score++;
