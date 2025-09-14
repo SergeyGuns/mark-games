@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "parcel src/index.html",
-    "deploy": "npm run gh-pages",
-    "gh-pages": "gh-pages -d dist -b gh-pages"
+    "start": "parcel serve src/index.html",
+    "build": "parcel build src/index.html --public-url ./",
+    "clear": "rm -fr dist",
+    "gh-pages": "gh-pages -d dist -b gh-pages",
+    "deploy": "npm run clear && npm run build && npm run gh-pages"
   },
   "author": "",
   "license": "ISC",
